@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bevande Animate</title>
+    <style>
+        body {
+            background: #232332;
+        }
+        .container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        h1 {
+            font-family: 'Rubik Mono One', monospace;
+            color: #fff;
+            margin-bottom: 40px;
+        }
+        .glasses {
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+            max-width: 800px;
+        }
+        .glass {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 0;
+            text-decoration: none;
+            width: 320px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.2);
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.2));
+            border-radius: 0 0 12px 12px;
+            overflow: hidden;
+            transition: height 1s ease;
+        }
+        .glass:hover .wave {
+            top: 80%; /* Graduale riduzione del liquido */
+        }
+        .glass:hover .ice {
+            bottom: 20px;
+            transform: rotate(0deg);
+        }
+        .glass::before, .glass::after {
+            content: '';
+            position: absolute;
+            z-index: -1;
+        }
+        .glass::before {
+            top: -22px;
+            left: -6px;
+            width: 10px;
+            height: 100px;
+            transform-origin: top left;
+            border-radius: 0 6px 0 0;
+            transform: rotate(-20deg);
+        }
+        .glass::after {
+            top: -24px;
+            left: -31px;
+            width: 36px;
+            height: 10px;
+            transform-origin: top left;
+            border-radius: 0 6px 0 0;
+        }
+        .glass.soda::before, .glass.soda::after {
+            background: #ff3363;
+        }
+        .glass.cola::before, .glass.cola::after {
+            background: #fff;
+        }
+        .text {
+            position: relative;
+            z-index: 4;
+            font-family: 'Rubik Mono One', monospace;
+            font-weight: 400;
+            font-size: 28px;
+            color: #fff;
+            margin-top: 220px;
+        }
+        .waveWrap {
+            position: absolute;
+            z-index: 2;
+            top: 0;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            width: calc(100% - 12px);
+            height: calc(100% - 6px);
+            border-radius: 0 0 6px 6px;
+            overflow: hidden;
+            transition: top 2s ease;
+        }
+        .wave {
+            position: absolute;
+            top: 20%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            animation: wave1 ease 5s infinite;
+        }
+        .glass.soda .wave {
+            background-color: hsla(184, 100%, 83%, 0.8);
+            background-image: radial-gradient(at 15% 25%, hsla(197, 71%, 55%, 0.53) 0px, transparent 50%),
+                              radial-gradient(at 78% 30%, hsla(178, 100%, 77%, 0.73) 0px, transparent 50%);
+        }
+        .glass.cola .wave {
+            background-color: hsla(26, 77%, 83%, 0.8);
+            background-image: radial-gradient(at 25% 51%, hsla(18, 74%, 47%, 0.53) 0px, transparent 50%);
+        }
+        .bubbleWrap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 125%;
+            overflow: hidden;
+        }
+        .bubble {
+            position: absolute;
+            bottom: 0;
+            aspect-ratio: 1/1;
+            animation: up 4s linear infinite;
+            background: radial-gradient(rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.6));
+            border-radius: 50%;
+        }
+        .bubble.sz-l { width: 4%; }
+        .bubble.sz-m { width: 3%; }
+        .bubble.sz-s { width: 2%; }
+        @keyframes up {
+            0% { bottom: 0%; }
+            100% { bottom: 120%; }
+        }
+        .iceWrap {
+            position: absolute;
+            z-index: 3;
+            top: 0;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            width: calc(100% - 12px);
+            height: calc(100% - 6px);
+        }
+        .ice {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            transition: all ease 4s;
+            animation: ice ease 5s infinite;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.5);
+        }
+        .ice-1 { left: 5%; bottom: 50%; transform: rotate(-25deg); }
+        .ice-2 { left: 20%; bottom: 30%; transform: rotate(34deg); }
+        .ice-3 { left: 60%; bottom: 40%; transform: rotate(-15deg); }
+        .fruit {
+            position: absolute;
+            top: -32px;
+            right: -32px;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 3px solid;
+        }
+        .fruit--lemon {
+            background: #fffede;
+            border-color: #ffe605;
+        }
+        .fruit--lime {
+            background: #eaffb3;
+            border-color: #62c800;
+        }
+        .fruit__inner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            width: 3px;
+            height: 100%;
+            background: inherit;
+        }
+        .fruit__inner::before, .fruit__inner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+        }
+        .fruit__inner::before { transform: rotate(60deg); }
+        .fruit__inner::after { transform: rotate(-60deg); }
+        @keyframes wave1 {
+            0% { clip-path: path('M0,124V2.71c122.49-10.81,209.27,15.25,320,0v121.29H0Z'); }
+            50% { clip-path: path('M0,123.96V2.66c122.28,13.91,215.81-10.38,320,0v121.29H0Z'); }
+            100% { clip-path: path('M0,124V2.71c122.49-10.81,209.27,15.25,320,0v121.29H0Z'); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Che bevanda scegli? Scilla Cariddi Rental Boat</h1>
+        <div class="glasses">
+            <a href="#" class="glass soda">
+                <div class="waveWrap">
+                    <div class="wave">
+                        <div class="bubbleWrap">
+                            <div class="bubble sz-s sp-1 dl-2"></div>
+                            <div class="bubble sz-m sp-2 dl-3"></div>
+                            <div class="bubble sz-l sp-3 dl-1"></div>
+                            <div class="bubble sz-s sp-1 dl-4"></div>
+                            <div class="bubble sz-m sp-2 dl-2"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fruit fruit--lime">
+                    <div class="fruit__inner"></div>
+                </div>
+                <div class="iceWrap">
+                    <div class="ice ice-1"></div>
+                    <div class="ice ice-2"></div>
+                    <div class="ice ice-3"></div>
+                </div>
+                <div class="text">SCILLA</div>
+            </a>
+            <a href="#" class="glass cola">
+                <div class="waveWrap">
+                    <div class="wave">
+                        <div class="bubbleWrap">
+                            <div class="bubble sz-s sp-1 dl-2"></div>
+                            <div class="bubble sz-m sp-2 dl-3"></div>
+                            <div class="bubble sz-l sp-3 dl-1"></div>
+                            <div class="bubble sz-s sp-1 dl-4"></div>
+                            <div class="bubble sz-m sp-2 dl-2"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fruit fruit--lemon">
+                    <div class="fruit__inner"></div>
+                </div>
+                <div class="iceWrap">
+                    <div class="ice ice-1"></div>
+                    <div class="ice ice-2"></div>
+                    <div class="ice ice-3"></div>
+                </div>
+                <div class="text">CARIDDI</div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
